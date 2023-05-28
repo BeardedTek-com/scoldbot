@@ -8,18 +8,36 @@ from mautrix.util.async_db import UpgradeTable
 from mautrix.util.config import BaseProxyConfig, ConfigUpdateHelper
 
 class Config(BaseProxyConfig):
+    """Retrieves values from base-config.yaml
+
+    Args:
+        BaseProxyConfig [mautrix.util.config.BaseProxyConfig]
+    """
     def do_update(self,helper: ConfigUpdateHelper) -> None:
-        helper.copy("blacklist")
-        helper.copy("quips")
+        helper.copy("watchword")
+        helper.copy("scoldword")
+        helper.copy("kickword")
+        helper.copy("contextlist")
+        helper.copy("autokicklist")
+        helper.copy("rep-start")
+        helper.copy("rep-kick")
+        helper.copy("scolds")
 
 
 class ScoldBot(Plugin):
+    """ScoldBot 
+    Monitors a room to watch for bad / abusive language or behaviour and gives the room members
+    and admins the tools to deal with it.
+    """
     async def start(self) -> None:
         self.config.load_and_update()
-    
-
     @classmethod
     def get_config_class(cls) -> Type[BaseProxyConfig]:
+        """Retrives configuration from base-config.yaml
+
+        Returns:
+            Config: Configuration parameters
+        """
         return Config
 
     @event.on(EventType.ROOM_MESSAGE)
