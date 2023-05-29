@@ -36,7 +36,7 @@
 - scold the user with a random entry in 'scolds' as a reply to the message
 - Subtract 10 from user's rep
 - Trigger a 'Kick Action'
-#### If a user's rep equals a rep-kick value:
+#### If a user's rep equals or passes a rep-kick value:
 - Trigger a 'Kick Action'
 #### If a user's rep goes below 1:
 - Trigger a 'Ban Action'

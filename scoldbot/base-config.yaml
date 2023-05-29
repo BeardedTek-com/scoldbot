@@ -1,21 +1,19 @@
-watchword:
-# watchword words will notify an admin in a private channel, but take no action
-  - stupid
+word_lists:
+  watchword:
+  # watchword words will notify an admin in a private channel, but take no action
+    - stupid
 
-scoldword:
-# scoldlist words will trigger a -1 rep
-  - damn
-  - darn
-  - sped
+  scoldword:
+  # scoldword words will trigger a -1 rep
+    - damn
+    - darn
+    - sped
 
-kickword:
-# admonishlist words will trigger a -5 rep
+  kickword: []
+  # kickword words will trigger a -5 rep
 
-allowlist: []
-# put phrases in this list to stop blocking of scold/banned words if they triggered out of context
-
-autokickword: []
-# words so bad, that they get an automatic kick and trigger a -10 rep
+  autokickword: []
+  # autokickword words automatic kick and trigger a -10 rep
 
 rep-start: 100
 # Starting rep value
