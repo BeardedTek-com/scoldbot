@@ -127,7 +127,7 @@ class ScoldBot(Plugin):
         await evt.reply(
             content=TextMessageEventContent(
                 msgtype=MessageType.TEXT,
-                body=f"random.choice(self.config['scolds'])\n \
+                body=f"{random.choice(self.config['scolds'])}\n \
                        You have {rep} reputation points remaining."
             )
         )
