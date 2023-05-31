@@ -1,5 +1,6 @@
 from typing import Dict, List, Type
 import random
+import tracemalloc
 
 from maubot import MessageEvent, Plugin
 from maubot.handlers import event
@@ -14,6 +15,8 @@ class Config(BaseProxyConfig):
         BaseProxyConfig [mautrix.util.config.BaseProxyConfig]
     """
     def do_update(self,helper: ConfigUpdateHelper) -> None:
+        """Update the config from base-config.yaml
+        """
         helper.copy("word_lists")
         helper.copy("rep-start")
         helper.copy("rep-kick")
@@ -24,12 +27,15 @@ class ScoldBot(Plugin):
     Monitors a room to watch for bad / abusive language or behaviour and gives the room members
     and admins the tools to deal with it.
     """
-    def __init__(self):
-        self.hits = {}
-
     async def start(self) -> None:
+        """Kick off the plugin
+        """
+        tracemalloc.start()
         self.config.load_and_update()
-        self.log.info(str(self.config))
+        self.log.info(self.config)
+    
+    async def stop(self) -> None:
+        tracemalloc.stop()
         
 
     @classmethod
@@ -52,7 +58,10 @@ class ScoldBot(Plugin):
                 if item.lower() in body.lower():
                     self.log.info(f"    {item} FOUND in '{body}'")
                     self.hits[word_list][item] = body
-                    self.hits['count'] += 1
+                    if "count" in self.hits:
+                        self.hits['count'] += 1
+                    else:
+                        self.hits['count'] = 1
         return self.hits
 
     async def send_scold(self,evt):
@@ -80,15 +89,13 @@ class ScoldBot(Plugin):
             # run word_list() for each list we want to check against
 
             #Reset self.hits for each run
-            self.hits = {
-                "count" : 0
-            }
+            self.hits = {}
             for item in self.config['word_lists']:
                 # Create a dict insode self.hits for each word_list
                 self.hits[item] = {}
-            self.check_msg(evt.content.body)
-            if self.hits['count'] > 0:
-                self.log.info(str(self.hits))
+            await self.check_word_lists(evt.content.body)
+            if "count" in self.hits:
+                self.log.info(self.hits)
                 if self.hits['watchword']:
                     # Send Message to admin
                     pass
@@ -96,13 +103,13 @@ class ScoldBot(Plugin):
                 if self.hits['scoldword']:
                     # Send Message to admin
                     # Scold User with a reply
-                    self.send_scold(evt)
+                    await self.send_scold(evt)
                     # -1 from User's Rep
 
                 if self.hits['kickword']:
                     # Send message to admin
                     # Scold User with a reply
-                    self.send_scold(evt)
+                    await self.send_scold(evt)
                     # Wait 30 seconds so they can see the reply
                     # Kick the user
                     # -5 from User's Rep
@@ -110,7 +117,7 @@ class ScoldBot(Plugin):
                 if self.hits['autokickword']:
                     # Send message to admin
                     # Scold User with a reply
-                    self.send_scold(evt)
+                    await self.send_scold(evt)
                     # Wait 30 seconds so they can see the reply
                     # Kick the user
                     # -10 from User's Rep
