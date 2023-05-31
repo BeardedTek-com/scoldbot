@@ -1,25 +1,22 @@
-word_lists:
-  watchword:
-  # watchword words will notify an admin in a private channel, but take no action
-    - stupid
+word_lists: 
 
-  scoldword:
-  # scoldword words will trigger a -1 rep
-    - damn
-    - darn
-    - sped
+  watchword: 
+    - "stupid"
 
-  kickword: []
-  # kickword words will trigger a -5 rep
+  scoldword: 
+    - "damn"
+    - "darn"
+    - "retard"
 
-  autokickword: []
-  # autokickword words automatic kick and trigger a -10 rep
+  kickword:
+    - "crap"
+
+  autokickword:
+    - "sped"
 
 rep-start: 100
-# Starting rep value
 
-rep-kick:
-# Levels at which you'll be kicked 
+rep-kick: 
   - 90
   - 80
   - 70
@@ -29,22 +26,15 @@ rep-kick:
   - 30
   - 20
   - 10
-  - 9
-  - 8
-  - 7
-  - 6
   - 5
   - 4
   - 3
   - 2
   - 1
 
-admin:
-  - @beardedtek:beardedtek.com
-
-scolds:
-# Scolding sentences that will be sent as a reply to the offending message
-  - Do you talk to your grandma like that?
-  - What would meemaw think of your language.
-  - You should be embarrased!
-  - I'm not mad, I'm just disappointed.
+scolds: 
+  - "Do you talk to your grandma like that?"
+  - "What would meemaw think of your language."
+  - "You should be embarrased!"
+  - "I'm not mad, I'm just disappointed."
+  - "Bruh."
