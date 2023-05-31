@@ -1,9 +1,9 @@
 # ScoldBot
-Maubot Plugin that scolds users who use blacklisted words
+Maubot Plugin that scolds users who use unwanted language.
 
-The bot will admonish the offending user with one of your provided quips when they use a blacklisted word or phrase
+The bot will admonish the offending user with one of your provided quips when they use an undesired word
 
-Careful with blacklisted words because it's just a very basic filter.  It only checks that the provided text exists in the message, not the context.
+Careful with blocked words because it's just a very basic filter.  It only checks that the provided text exists in the message, not the context.
 
 # Install ALPHA Releases
 - Download one of these:
@@ -17,5 +17,5 @@ Careful with blacklisted words because it's just a very basic filter.  It only c
   - Select your bot's name in Primary User dropdown
   - Select `dev.beardedtek.scoldbot` in Type dropdown
   - CLick Create
-- Configure blacklist and quips in the newly displayed config file.
+- Configure word_lists and quips in the newly displayed config file.
 - Click Save
