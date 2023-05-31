@@ -4,12 +4,9 @@
 ## NOTE: THIS IS A WORK IN PROGRESS!
 ### Code in main will change frequenty.  This README is for now being used as a guideline for how I plan to lay out this bot.
 
-## Please see [PRE_ALPHA.md](PRE_ALPHA.md) for current info and how to install a current pre-alpha release.
-
-
 ### The first line of defense is a list of watch words that trigger notification to a separate control channel
 
-### The second line of defense is a configurable blacklist/whitelist located in base-config.yaml
+### The second line of defense is a configurable words_list located in base-config.yaml
 
 ### How to trigger:
 - If the word appears on any of the following lists it triggers a start:
@@ -24,15 +21,12 @@
 #### If watchword:
 - notify admins in private admin channel
 #### If scoldword:
-- notify admins in private admin channel
 - scold the user with a random entry in 'scolds' as a reply to the message
 - Subtract 1 from user's rep
 #### If kickword:
-- notify admins in private admin channel
 - scold the user with a random entry in 'scolds' as a reply to the message
 - Subtract 5 from user's rep
 #### If autokickword:
-- notify admins in private admin channel
 - scold the user with a random entry in 'scolds' as a reply to the message
 - Subtract 10 from user's rep
 - Trigger a 'Kick Action'
@@ -42,28 +36,40 @@
 - Trigger a 'Ban Action'
 
 ### Kick Action:
-- Send User a DM explaining why they were kicked
 - User can rejoin room right away
-- If a private channel, user will be sent an invite after 1 minute
 
 ### Ban Action:
-- Send user a DM explaining wy they were kicked
 - User is banned from room
 
-### Room intervention:
-#### Should non-admin members of the room feel this should not have been a violation:
-- Contact an admin to reverse it
-- Send the command: !addrep <user>
-- Any room member can only addrep once per hour
-#### Should admin members of the room feel this should not have been a violation:
-- Can use the following commands to mitigate:
-- !addrep <user> <amount>
-- !unban <user> <new_rep_value>
-#### Should an admin feel a violation is egregious, they can use the following commands:
-- !kick <user>          : immediately kicks the user
-- !ban <user>           : immediately bans the user
-- !kickban <user>       : immediately kicks and bans the user
-- !rep <user> <value>   : manually adjust their 'rep' score
+# Future Features
+### Non-admin commands:
+-  !addrep `user`
+  - Any room member can only addrep once per user
+  - This will add up to 5 rep points.
+  - The maximum a rep value can be is defined in `rep-start` in maubot.yaml
+- !scold `user`
+  - This will remove up to 1 rep point.  A non-admin can only use this command 5 times per day.
+- !invite `user`
+  - Send an invite to `user` (@user:example.com)
+### Admin commands:
+- !redact
+  - If done as a reply to a message, will remove the message
+  - ***WARNING*** This cannot be undone
+- !addrep `user` `amount`
+  - Adds `amount` rep points to `user`
+- !rep `user` `rep`
+  - manually adjust `user`'s `rep`
+- !scold `user` `amount`
+  - Scold and remove `amount` rep points from `user`
+- !kick `user`
+  - Immediately kick `user`
+  - https://docs.mau.fi/python/latest/api/mautrix.client.api.html#mautrix.client.ClientAPI.kick_user
+- !ban `user`
+  - immediately kick and ban `user`
+  - https://docs.mau.fi/python/latest/api/mautrix.client.api.html#mautrix.client.ClientAPI.ban_user
+- !unban `user` `rep`
+  - Unban `user` and set rep to `rep`
+  - https://docs.mau.fi/python/latest/api/mautrix.client.api.html#mautrix.client.ClientAPI.unban_user
 
 # Installation
 - Download `dev.beardedtek.scoldbot-v001.mbp`

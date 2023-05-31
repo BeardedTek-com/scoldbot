@@ -77,7 +77,7 @@ class ScoldBot(Plugin):
         return rval
 
     async def update_rep(self,sender: str,msg: str, rep: int) -> None:
-        print(f"Current Rep: {rep}")
+        self.log.info(f"Current Rep: {rep}")
         row = await self.database.fetchrow(f"SELECT rep FROM rep WHERE sender='{sender}'")
         if row:
             await self.database_update(sender,msg,rep)
@@ -138,6 +138,9 @@ class ScoldBot(Plugin):
         Args:
             evt: The event to handle
         """
+        kick = False
+        ban = False
+        scold = False
         if evt.sender != self.client.mxid:
         # Only check if we didn't send the message
             # run word_list() for each list we want to check against
@@ -157,29 +160,52 @@ class ScoldBot(Plugin):
                     # Send Message to admin
                     new_rep = rep
                 if self.hits['scoldword']:
+                    # Scold the User
+                    scold = True
                     # -1 from User's Rep
                     new_rep = rep - 1
 
                 if self.hits['kickword']:
+                    # Scold the User
+                    scold = True
                     # Kick the user
                     kick = True
                     # -5 from User's Rep
                     new_rep = rep -5
 
                 if self.hits['autokickword']:
+                    # Scold the User
+                    scold = True
                     # Kick the user
                     kick = True
                     # -10 from User's Rep
                     new_rep = rep - 10
             # Check User's Rep and see if action needs to be taken
-            
-            await self.send_scold(evt,new_rep)
             if new_rep != rep:
                 await self.update_rep(sender,msg,new_rep)
-            for rep_kick in self.config['rep-kick']:
-                if rep > rep_kick > new_rep:
-                    #kick the user
-                    self.log.info(f"KICK {sender}!!!")
-            if 1 > new_rep:
+            if not kick:
+                for rep_kick in self.config['rep-kick']:
+                    if rep > rep_kick > new_rep:
+                        #kick the user
+                        self.log.info(f"KICK {sender}!!!")
+                        kick = True
+            if 1 > new_rep and not ban:
+                ban = True
                 self.log.info(f"KICKBAN {sender}")
 
+            # Tale Action
+            if scold:
+                await self.send_scold(evt,new_rep)
+            if kick:
+                await self.client.kick_user(evt.room_id,
+                                            evt.sender,
+                                            reason="Violated room language policy")
+                #pass
+            if ban:
+                await self.client.ban_user(evt.room_id,
+                                           evt.sender,
+                                           reason="You have lost your reputation in this room.  Contact a room admin if you'd like to atone for your vulgarity.")
+                #pass
+            scold = False
+            ban = False
+            kick = False
