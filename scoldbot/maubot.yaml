@@ -28,7 +28,9 @@ modules:
 main_class: ScoldBot
 
 # Whether or not instances need a database
-database: false
+database: true
+database_type: asyncpg
+
 
 # Whether or not a configuration file is needed
 config: true

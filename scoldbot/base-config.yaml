@@ -39,6 +39,9 @@ rep-kick:
   - 2
   - 1
 
+admin:
+  - @beardedtek:beardedtek.com
+
 scolds:
 # Scolding sentences that will be sent as a reply to the offending message
   - Do you talk to your grandma like that?
